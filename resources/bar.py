@@ -9,4 +9,12 @@
 #@Copyright (c)  all right reserved 
 #**************************************************************************/
 
+from flask import Flask,Request
+from flask_restful import Api, Resource
+
+class Bar(Resource):
+    def get(self):
+        pass
+    def post(self):
+        pass
 

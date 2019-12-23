@@ -12,9 +12,9 @@
 from flask import Flask, Request
 from flask_restful import Api, Resource, fields
 
-from myapi.resources.foo import Foo
-from myapi.resources.bar import Bar
-from myapi.resources.baz import Baz
+from resources.foo import Foo
+from resources.bar import Bar
+from resources.baz import Baz
 
 app = Flask(__name__)
 api = Api(app)
@@ -24,6 +24,20 @@ api.add_resource(Foo, '/Foo', '/Foo/<str:id>')
 api.add_resource(Bar, 'Bar', '/Bar/<str:id>')
 api.add_ressouce(Baz, 'Baz', '/Baz/<str:id>')
 api.add_ressouce(User, 'User', '/User/<str:id>')
+
+ass TodoSimple(Resource):
+    def get(self, todo_id):
+        if (todo_id in todos):
+            return {todo_id: todos[todo_id]}
+        else:
+            return {}
+
+    def put(self, todo_id):
+        todos[todo_id] = request.form['data']
+        return {todo_id: todos[todo_id]}
+
+
+api.add_resource(TodoSimple, '/<string:todo_id>')
 
 
 if __name__ == '__main__':

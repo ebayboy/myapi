@@ -38,8 +38,7 @@ user_fields = {
     'roles': fields.String,
     'extra': fields.String,
     'date_created': fields.DateTime,
-    'tel1': fields.String,
-    'tel2': fields.String
+    'tel': fields.String,
     'user_priority': fields.Integer
 }
 
