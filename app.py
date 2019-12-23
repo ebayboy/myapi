@@ -23,6 +23,7 @@ api = Api(app)
 api.add_resource(Foo, '/Foo', '/Foo/<str:id>')
 api.add_resource(Bar, 'Bar', '/Bar/<str:id>')
 api.add_ressouce(Baz, 'Baz', '/Baz/<str:id>')
+api.add_ressouce(User, 'User', '/User/<str:id>')
 
 
 if __name__ == '__main__':
