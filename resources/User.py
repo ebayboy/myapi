@@ -68,6 +68,7 @@ class User(Resource):
 
         return user.json(), 201
 
+    @marshal_with(user_fields)
     def get(self, username):
         user = UserModel.find_by_name(username)
         if user: 
@@ -77,8 +78,9 @@ class User(Resource):
 
 
 class UserList(Resource):
-    def get(self):
-        return {'user': list(map(lambda x: x.json(), UserModel.query.all()))}
+    @marshal_with(user_fields)
+    def get(self): 
+        return UserModel.query.all();
 
 
 

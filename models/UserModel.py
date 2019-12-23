@@ -10,6 +10,7 @@
 # **************************************************************************/
 
 from db import db
+import json
 
 # 将表映射为对象User
 class UserModel(db.Model):
@@ -44,7 +45,7 @@ class UserModel(db.Model):
 
     @classmethod
     def find_by_name(self, username):
-        return db.session.query(UserModel.username).filter_by(username=username).first()
+        return UserModel.query.filter_by(username=username).first()
 
 if __name__ == '__main__':
     app.run(debug=True)
