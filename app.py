@@ -12,33 +12,20 @@
 from flask import Flask, Request
 from flask_restful import Api, Resource, fields
 
+#import resource
 from resources.foo import Foo
 from resources.bar import Bar
 from resources.baz import Baz
+from resources.r_user import User
 
 app = Flask(__name__)
 api = Api(app)
 
-
-api.add_resource(Foo, '/Foo', '/Foo/<str:id>')
-api.add_resource(Bar, 'Bar', '/Bar/<str:id>')
-api.add_ressouce(Baz, 'Baz', '/Baz/<str:id>')
-api.add_ressouce(User, 'User', '/User/<str:id>')
-
-ass TodoSimple(Resource):
-    def get(self, todo_id):
-        if (todo_id in todos):
-            return {todo_id: todos[todo_id]}
-        else:
-            return {}
-
-    def put(self, todo_id):
-        todos[todo_id] = request.form['data']
-        return {todo_id: todos[todo_id]}
-
-
-api.add_resource(TodoSimple, '/<string:todo_id>')
-
+#add resource
+api.add_resource(Foo, '/Foo', '/Foo/<string:id>')
+api.add_resource(Bar, '/Bar', '/Bar/<string:id>')
+api.add_resource(Baz, '/Baz', '/Baz/<string:id>')
+api.add_resource(User, '/User', '/User/<string:id>')
 
 if __name__ == '__main__':
     app.run(debug=True)

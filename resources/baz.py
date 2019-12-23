@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 #/****************************************************************************
-#@file:foo.py 
+#@file:bar.py 
 #@author:ebayboy@163.com 
 #@date:2019-12-23 15:46 
 #@version 1.0  
@@ -9,15 +9,12 @@
 #@Copyright (c)  all right reserved 
 #**************************************************************************/
 
-from flask import Flask, Request
-from flask_restful import Api, Resource, fields
+from flask import Flask,Request
+from flask_restful import Api, Resource
 
-
-class Foo(Resource):
+class Baz(Resource):
     def get(self):
         pass
-
     def post(self):
         pass
-
 

@@ -10,7 +10,6 @@ def email(email_str):
     else:
         raise ValidationError("{} is not a valid email")
 
-
 post_parser = reqparse.RequestParser()
 post_parser.add_argument(
     'username', dest='username',
@@ -42,7 +41,7 @@ user_fields = {
     'user_priority': fields.Integer
 }
 
-class User(restful.Resource):
+class User(Resource):
 
     @marshal_with(user_fields)
     def post(self):
