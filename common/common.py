@@ -12,13 +12,43 @@
 from flask import jsonify
 from werkzeug.exceptions import HTTPException
 
+
 class AlreadyExistsError(HTTPException):
-    pass
+    def __init__(self, ErrorInfo):
+        super().__init__(self)
+        self.errorinfo = ErrorInfo
+
+    def __str__(self):
+        return self.errorinfo
+
 
 class ResourceDoesNotExistError(HTTPException):
-    pass
+    def __init__(self, ErrorInfo):
+        super().__init__(self)
+        self.errorinfo = ErrorInfo
+
+    def __str__(self):
+        return self.errorinfo
+
+
+class BadMojoError(HTTPException):
+    def __init__(self, ErrorInfo):
+        super().__init__(self)
+        self.errorinfo = ErrorInfo
+
+    def __str__(self):
+        return self.errorinfo
+
+class InternelServerError(HTTPException):
+    def __init__(self, ErrorInfo):
+        super().__init__(self)
+        self.errorinfo = ErrorInfo
+
+    def __str__(self):
+        return self.errorinfo
 
 errors = {
+    'BadMojoError': {'status': 409, 'message': 'go away'},
     'AlreadyExistsError': {
         'message': "It is already exist.",
         'status': 409
@@ -27,13 +57,18 @@ errors = {
         'message': "A resource with that ID no longer exists.",
         'status': 410,
         'extra': "Any extra information you want."
-    }
+    },
+    'InternelServerError': {
+        'message': "Internel server error.",
+        'status': 500
+    },
 }
+
 
 class Common:
     def returnTrueJson(self, data, message="success"):
         print("data:", data)
-        ret=jsonify({
+        ret = jsonify({
             "status": 1,
             "data": data,
             "message": message

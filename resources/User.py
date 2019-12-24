@@ -4,9 +4,10 @@ from flask import Flask, request
 from flask_restful import Resource, Api, fields, marshal_with, reqparse, abort, marshal
 
 from models.UserModel import UserModel
-from common.common import Common, AlreadyExistsError, ResourceDoesNotExistError
+from common.common import *
 
 # check for email
+
 
 def email(email_str):
     """ return True if email_str is a valid email """
@@ -55,18 +56,19 @@ user_fields = {
 class User(Resource):
     def post(self):
         data = post_parser.parse_args()
-        print ("post username:", data.username)
+        print("post username:", data.username)
 
         if UserModel.find_by_name(data.username):
-            abort(404, message="An item with name '{}' already exists.".format(data.username),
-                    data=None, status=0)
+            raise AlreadyExistsError(
+                "An item with name '{}' already exists.".format(
+                    data.username))
 
         user = UserModel(**data)
 
         try:
             user.create_user()
         except BaseException:
-            abort (500, message= "An error occurred inserting the item.")
+            abort(500, message="An error occurred inserting the item.")
 
         return Common.returnTrueJson(Common, marshal(user, user_fields))
 
@@ -75,14 +77,16 @@ class User(Resource):
         if user:
             return Common.returnTrueJson(Common, marshal(user, user_fields))
         else:
-            raise AlreadyExistsError()
+            abort(500)
+            #raise InternelServerError(message="username '{}' not exist!".format(username))
+            #raise ResourceDoesNotExistError("username '{}' not exist!".format(username))
+
 
 class UserList(Resource):
     def get(self):
         userlist = UserModel.query.all()
         if userlist:
-            return Common.returnTrueJson(Common, marshal(userlist, user_fields))
+            return Common.returnTrueJson(
+                Common, marshal(userlist, user_fields))
         else:
             abort(410, message="Not found")
-           
-

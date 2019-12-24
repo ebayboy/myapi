@@ -9,7 +9,7 @@
 # @Copyright (c)  all right reserved
 # **************************************************************************/
 
-from flask import Flask, Request, jsonify
+from flask import Flask, Request, jsonify, got_request_exception
 from flask_restful import Api, Resource, fields
 from flask_sqlalchemy import SQLAlchemy
 import sys
@@ -31,9 +31,9 @@ from common.common import Common
 app = Flask(__name__)
 app.config.from_object(config)
 
-api = Api(app, errors=cm.errors)
+got_request_exception.connect(log_exception, app)
 
-#api = Api(app, catch_all_404s=True, errors=cm.GL_errors)
+api = Api(app, catch_all_404s=True, errors=cm.errors)
 
 # add resource
 """
@@ -44,6 +44,11 @@ api.add_resource(Baz, '/Baz', '/Baz/<string:id>')
 
 api.add_resource(User, '/User', '/User/<string:username>')
 api.add_resource(UserList, '/UserList')
+
+
+def log_exception(sender, exception, **extra):
+    "Log an exception to our logging framework",
+    sender.logger.debug('Got exception during processing: %s', exception)
 
 if __name__ == '__main__':
     from db import db
