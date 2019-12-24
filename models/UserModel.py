@@ -36,8 +36,8 @@ class UserModel(db.Model):
         try:
             db.session.add(self)
             db.session.commit()
-            return self;
-        except:
+            return self
+        except BaseException:
             db.session.rollback()
             db.session.flush()
             return None
@@ -47,7 +47,7 @@ class UserModel(db.Model):
             db.session.delete(self)
             db.session.commit()
             return self
-        except:
+        except BaseException:
             db.session.rollback()
             db.session.flush()
             return None
@@ -55,9 +55,11 @@ class UserModel(db.Model):
     def update_user(self):
         try:
             db.session.commit()
-            return self;
-        except:
-            return None 
+            return self
+        except BaseException:
+            db.session.rollback()
+            db.session.flush()
+            return None
 
     def select_user():
         users_list = UserModel.query.all()
