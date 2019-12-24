@@ -1,13 +1,12 @@
 
-#from flask_jwt import jwt_required
+# from flask_jwt import jwt_required
 from flask import Flask, request
-from flask_restful import Resource, Api, fields, marshal_with, reqparse
-import json
+from flask_restful import Resource, Api, fields, marshal_with, reqparse, abort, marshal
 
 from models.UserModel import UserModel
+from common.common import Common, AlreadyExistsError, ResourceDoesNotExistError
 
 # check for email
-
 
 def email(email_str):
     """ return True if email_str is a valid email """
@@ -15,6 +14,7 @@ def email(email_str):
         return True
     else:
         raise ValidationError("{} is not a valid email")
+
 
 post_parser = reqparse.RequestParser()
 post_parser.add_argument(
@@ -51,36 +51,38 @@ user_fields = {
     'user_priority': fields.Integer
 }
 
-class User(Resource):
-    @marshal_with(user_fields)
-    def post(self, username):
-        if UserModel.find_by_name(username):
-            return {
-                'message': "An item with name '{}' already exists.".format(name)}, 400
 
-        data = Item.parser.parse_args()
-        user = UserModel(username, **data)
+class User(Resource):
+    def post(self):
+        data = post_parser.parse_args()
+        print ("post username:", data.username)
+
+        if UserModel.find_by_name(data.username):
+            abort(404, message="An item with name '{}' already exists.".format(data.username),
+                    data=None, status=0)
+
+        user = UserModel(**data)
 
         try:
             user.create_user()
         except BaseException:
-            return {"message": "An error occurred inserting the item."}, 500
+            abort (500, message= "An error occurred inserting the item.")
 
-        return user.json(), 201
+        return Common.returnTrueJson(Common, marshal(user, user_fields))
 
-    @marshal_with(user_fields)
     def get(self, username):
         user = UserModel.find_by_name(username)
-        if user: 
-            return user;
+        if user:
+            return Common.returnTrueJson(Common, marshal(user, user_fields))
         else:
-            return {"message": "Not found"}, 404
-
+            raise AlreadyExistsError()
 
 class UserList(Resource):
-    @marshal_with(user_fields)
-    def get(self): 
-        return UserModel.query.all();
-
-
+    def get(self):
+        userlist = UserModel.query.all()
+        if userlist:
+            return Common.returnTrueJson(Common, marshal(userlist, user_fields))
+        else:
+            abort(410, message="Not found")
+           
 

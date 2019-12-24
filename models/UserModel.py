@@ -11,6 +11,10 @@
 
 from db import db
 import json
+from sqlalchemy.orm import class_mapper
+from datetime import datetime
+from flask_restful import fields, marshal_with
+
 
 # 将表映射为对象User
 class UserModel(db.Model):
@@ -19,14 +23,14 @@ class UserModel(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(45), primary_key=True, nullable=False)
     password = db.Column(db.String(45), nullable=True)
-    email =  db.Column(db.String(45), nullable=True)
-    sub =  db.Column(db.String(45), nullable=True)
-    uuid =  db.Column(db.String(45), nullable=True)
-    extra =  db.Column(db.String(45), nullable=True)
-    date_created =  db.Column(db.DateTime, nullable=True)
+    email = db.Column(db.String(45), nullable=True)
+    sub = db.Column(db.String(45), nullable=True)
+    uuid = db.Column(db.String(45), nullable=True)
+    extra = db.Column(db.String(45), nullable=True)
+    date_created = db.Column(db.DateTime, nullable=True)
     user_priority = db.Column(db.Integer, nullable=True)
-    tel =  db.Column(db.String(45), nullable=True)
-    timestamp =  db.Column(db.DateTime, nullable=True)
+    tel = db.Column(db.String(45), nullable=True)
+    timestamp = db.Column(db.DateTime, nullable=True)
 
     def create_user(self):
         db.session.add(self)
@@ -46,6 +50,7 @@ class UserModel(db.Model):
     @classmethod
     def find_by_name(self, username):
         return UserModel.query.filter_by(username=username).first()
+
 
 if __name__ == '__main__':
     app.run(debug=True)

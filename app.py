@@ -9,9 +9,10 @@
 # @Copyright (c)  all right reserved
 # **************************************************************************/
 
-from flask import Flask, Request
+from flask import Flask, Request, jsonify
 from flask_restful import Api, Resource, fields
 from flask_sqlalchemy import SQLAlchemy
+import sys
 
 #import resource
 import config
@@ -22,10 +23,17 @@ from resources.baz import Baz
 
 from resources.User import User
 from resources.User import UserList
+from werkzeug.exceptions import HTTPException
+
+import common.common as cm
+from common.common import Common
 
 app = Flask(__name__)
-api = Api(app)
 app.config.from_object(config)
+
+api = Api(app, errors=cm.errors)
+
+#api = Api(app, catch_all_404s=True, errors=cm.GL_errors)
 
 # add resource
 """
