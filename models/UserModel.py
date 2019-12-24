@@ -33,16 +33,31 @@ class UserModel(db.Model):
     timestamp = db.Column(db.DateTime, nullable=True)
 
     def create_user(self):
-        db.session.add(self)
-        db.session.commit()
+        try:
+            db.session.add(self)
+            db.session.commit()
+            return self;
+        except:
+            db.session.rollback()
+            db.session.flush()
+            return None
 
     def delete_user(self):
-        db.session.delete(self)
-        db.session.commit()
+        try:
+            db.session.delete(self)
+            db.session.commit()
+            return self
+        except:
+            db.session.rollback()
+            db.session.flush()
+            return None
 
     def update_user(self):
-        db.session.add(user)
-        db.session.commit()
+        try:
+            db.session.commit()
+            return self;
+        except:
+            return None 
 
     def select_user():
         users_list = UserModel.query.all()

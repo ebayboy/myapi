@@ -5,17 +5,9 @@ from flask_restful import Resource, Api, fields, marshal_with, reqparse, abort, 
 
 from models.UserModel import UserModel
 from common.common import *
+import sys
 
 # check for email
-
-
-def email(email_str):
-    """ return True if email_str is a valid email """
-    if valid_email(email):
-        return True
-    else:
-        raise ValidationError("{} is not a valid email")
-
 
 post_parser = reqparse.RequestParser()
 post_parser.add_argument(
@@ -26,11 +18,11 @@ post_parser.add_argument(
 post_parser.add_argument(
     'password', dest='password',
     type=str, location='form',
-    help='The user\'s passoword',
+    help='The user\'s password',
 )
 post_parser.add_argument(
     'email', dest='email',
-    type=email, location='form',
+    type=str, location='form',
     help='The user\'s email',
 )
 post_parser.add_argument(
@@ -63,12 +55,9 @@ class User(Resource):
                     data.username))
 
         user = UserModel(**data)
-        try:
-            user.create_user()
-        except BaseException:
+        if user.create_user() is None:
             raise InternelServerError("An error occurred inserting the item. '{}'".
                                       format(data.username))
-
         return Common.returnTrueJson(Common, marshal(user, user_fields))
 
     def get(self, username):
@@ -78,6 +67,29 @@ class User(Resource):
 
         raise ResourceDoesNotExistError(
             "username '{}' not exist!".format(username))
+
+    def delete(self, username):
+        user = UserModel.find_by_name(username)
+        if user is None:
+            raise ResourceDoesNotExistError(
+                "username '{}' not exist!".format(username))
+
+        if user.delete_user() is None:
+            raise InternelServerError("An error occurred deleting...")
+
+        return Common.returnTrueJson(Common, marshal(user, user_fields))
+
+    def put(self):
+        data = post_parser.parse_args()
+        if UserModel.find_by_name(data.username) is None:
+            raise ResourceDoesNotExistError(
+                "username '{}' not exist!".format(username))
+
+        user = UserModel(**data)
+        if user.update_user() is None:
+            raise InternelServerError("An error occurred update_user the item. '{}'".
+                                      format(data.username))
+        return Common.returnTrueJson(Common, marshal(user, user_fields))
 
 
 class UserList(Resource):

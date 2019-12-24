@@ -72,14 +72,11 @@ errors = {
 
 class Common:
     def returnTrueJson(self, data, message="success"):
-        print("data:", data)
-        ret = jsonify({
+        return jsonify({
             "status": 1,
             "data": data,
             "message": message
         })
-        print("ret:", ret)
-        return ret
 
     def returnFalseJson(self, data=None, message="failed"):
         return jsonify({
