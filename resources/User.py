@@ -56,7 +56,6 @@ user_fields = {
 class User(Resource):
     def post(self):
         data = post_parser.parse_args()
-        print("post username:", data.username)
 
         if UserModel.find_by_name(data.username):
             raise AlreadyExistsError(
@@ -64,11 +63,11 @@ class User(Resource):
                     data.username))
 
         user = UserModel(**data)
-
         try:
             user.create_user()
         except BaseException:
-            abort(500, message="An error occurred inserting the item.")
+            raise InternelServerError("An error occurred inserting the item. '{}'".
+                                      format(data.username))
 
         return Common.returnTrueJson(Common, marshal(user, user_fields))
 
@@ -76,10 +75,9 @@ class User(Resource):
         user = UserModel.find_by_name(username)
         if user:
             return Common.returnTrueJson(Common, marshal(user, user_fields))
-        else:
-            abort(500)
-            #raise InternelServerError(message="username '{}' not exist!".format(username))
-            #raise ResourceDoesNotExistError("username '{}' not exist!".format(username))
+
+        raise ResourceDoesNotExistError(
+            "username '{}' not exist!".format(username))
 
 
 class UserList(Resource):
@@ -88,5 +86,5 @@ class UserList(Resource):
         if userlist:
             return Common.returnTrueJson(
                 Common, marshal(userlist, user_fields))
-        else:
-            abort(410, message="Not found")
+
+        raise ResourceDoesNotExistError("Not found!")

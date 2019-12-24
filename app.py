@@ -28,6 +28,10 @@ from werkzeug.exceptions import HTTPException
 import common.common as cm
 from common.common import Common
 
+def log_exception(sender, exception, **extra):
+    "Log an exception to our logging framework",
+    sender.logger.debug('Got exception during processing: %s', exception)
+
 app = Flask(__name__)
 app.config.from_object(config)
 
@@ -44,11 +48,6 @@ api.add_resource(Baz, '/Baz', '/Baz/<string:id>')
 
 api.add_resource(User, '/User', '/User/<string:username>')
 api.add_resource(UserList, '/UserList')
-
-
-def log_exception(sender, exception, **extra):
-    "Log an exception to our logging framework",
-    sender.logger.debug('Got exception during processing: %s', exception)
 
 if __name__ == '__main__':
     from db import db
