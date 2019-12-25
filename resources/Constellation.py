@@ -11,12 +11,30 @@ import sys
 
 class Constellation(Resource):
     def get(self, name):
+        print("name'{}'".format(name))
+        print("name:", name)
         user = ConstellationModel.find_by_name(name)
         if user:
             return Common.returnTrueJson(Common, marshal(user, user_fields))
 
         raise ResourceDoesNotExistError(
             "name '{}' not exist!".format(name))
+
+user_fields = {
+    'id': fields.Integer,
+    'name': fields.String,
+    'date': fields.Integer,
+    'datetime': fields.String,
+    'all': fields.String,
+    'color': fields.String,
+    'health': fields.String,
+    'love': fields.String,
+    'money': fields.String,
+    'number': fields.Integer,
+    'QFriend': fields.String,
+    'summary': fields.String,
+    'work': fields.String,
+}
 
 class ConstellationList(Resource):
     def get(self):
