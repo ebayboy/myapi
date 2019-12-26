@@ -26,9 +26,24 @@ post_parser.add_argument(
     help='The user\'s email',
 )
 post_parser.add_argument(
-    'user_priority', dest='user_priority',
-    type=int, location='form',
-    default=1, choices=range(5), help='The user\'s priority',
+    'sub', dest='sub',
+    type=str, location='form'
+)
+post_parser.add_argument(
+    'uuid', dest='uuid',
+    type=str, location='form'
+)
+post_parser.add_argument(
+    'extra', dest='extra',
+    type=str, location='form'
+)
+post_parser.add_argument(
+    'date_created', dest='date_created',
+    location='form'
+)
+post_parser.add_argument(
+    'tel', dest='tel',
+    type=str, location='form'
 )
 
 user_fields = {
