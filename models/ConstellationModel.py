@@ -35,6 +35,36 @@ class ConstellationModel(db.Model):
     work = db.Column(db.String(45), primary_key=True, nullable=False)
     timestamp = db.Column(db.DateTime, nullable=True)
 
+    def create_constellation(self):
+        try:
+            db.session.add(self)
+            db.session.commit()
+            return self
+        except BaseException:
+            db.session.rollback()
+            db.session.flush()
+            return None
+
+    def update_constellation(self):
+        try:
+            db.session.commit()
+            return self
+        except BaseException:
+            db.session.rollback()
+            db.session.flush()
+            return None
+
+
+    def delete_constellation(self):
+        try:
+            db.session.delete(self)
+            db.session.commit()
+            return self
+        except BaseException:
+            db.session.rollback()
+            db.session.flush()
+            return None
+
     def select_constellation():
         constellations_list = ConstellationModel.query.all()
 

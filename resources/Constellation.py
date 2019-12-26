@@ -9,18 +9,7 @@ import sys
 
 # check for email
 
-class Constellation(Resource):
-    def get(self, name):
-        print("name'{}'".format(name))
-        print("name:", name)
-        user = ConstellationModel.find_by_name(name)
-        if user:
-            return Common.returnTrueJson(Common, marshal(user, user_fields))
-
-        raise ResourceDoesNotExistError(
-            "name '{}' not exist!".format(name))
-
-user_fields = {
+constellation_fields = {
     'id': fields.Integer,
     'name': fields.String,
     'date': fields.Integer,
@@ -36,11 +25,34 @@ user_fields = {
     'work': fields.String,
 }
 
+
+class Constellation(Resource):
+    def post(self):
+        data = post_parser.parse_args()
+        if ConstellationModel.find_by_name(data.name):
+            raise AlreadyExistsError(
+                "An item with name '{}' already exists.".format(
+                    data.name))
+        constellation = ConstellationModel(**data)
+        if constellation.create_constellation() is None:
+            raise InternelServerError("An error occurred inserting the item. '{}'".
+                                      format(data.name))
+        return Common.returnTrueJson(Common, marshal(
+            constellation, constellation_fields))
+
+    def get(self, name):
+        constellation = ConstellationModel.find_by_name(name)
+        if constellation:
+            return Common.returnTrueJson(Common, marshal(constellation, constellation_fields))
+
+        raise ResourceDoesNotExistError(
+            "name '{}' not exist!".format(name))
+
 class ConstellationList(Resource):
     def get(self):
-        userlist = ConstellationModel.query.all()
-        if userlist:
+        constellationlist = ConstellationModel.query.all()
+        if constellationlist:
             return Common.returnTrueJson(
-                Common, marshal(userlist, user_fields))
+                Common, marshal(constellationlist, constellation_fields))
 
         raise ResourceDoesNotExistError("Not found!")
