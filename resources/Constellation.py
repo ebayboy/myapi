@@ -10,7 +10,6 @@ import sys
 # check for email
 
 constellation_fields = {
-    'id': fields.Integer,
     'name': fields.String,
     'date': fields.Integer,
     'datetime': fields.String,
@@ -22,34 +21,22 @@ constellation_fields = {
     'number': fields.Integer,
     'QFriend': fields.String,
     'summary': fields.String,
-    'work': fields.String,
+    'work': fields.String
 }
 
 class Constellation(Resource):
     def post(self):
+        dic_filter=marshal(request.form, constellation_fields)
 
-        data=request.form['data']
-        print("data",data)
+        if ConstellationModel.find_by_name(format(dic_filter['name'])):
+            raise AlreadyExistsError( "An item with name '{}' already exists.".format(dic_filter['name']))
 
-        r1=marshal(data, constellation_fields)
-        print(r1)
-        print("name:", data['name'])
-        print("summary:", data['summary'])
-
-        return 
-
-    """
-        if ConstellationModel.find_by_name(data.name):
-            raise AlreadyExistsError(
-                "An item with name '{}' already exists.".format(
-                    data.name))
-        constellation = ConstellationModel(**data)
+        constellation = ConstellationModel(**dic_filter)
         if constellation.create_constellation() is None:
             raise InternelServerError("An error occurred inserting the item. '{}'".
-                                      format(data.name))
+                                      format(dic_filter['name']))
         return Common.returnTrueJson(Common, marshal(
             constellation, constellation_fields))
-    """
 
     def get(self, name):
         constellation = ConstellationModel.find_by_name(name)

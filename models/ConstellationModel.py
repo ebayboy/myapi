@@ -20,8 +20,8 @@ from flask_restful import fields, marshal_with
 class ConstellationModel(db.Model):
     __tablename__ = 'constellation'
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(45), primary_key=True, nullable=False)
+
     date = db.Column(db.Integer, nullable=True)
     datetime = db.Column(db.String(45), nullable=True)
     all = db.Column(db.String(45), nullable=True)
@@ -32,8 +32,7 @@ class ConstellationModel(db.Model):
     number = db.Column(db.Integer, nullable=True)
     QFriend = db.Column(db.String(255), nullable=True)
     summary = db.Column(db.String(255), nullable=True)
-    work = db.Column(db.String(45), primary_key=True, nullable=False)
-    timestamp = db.Column(db.DateTime, nullable=True)
+    work = db.Column(db.String(45), nullable=True)
 
     def create_constellation(self):
         try:
