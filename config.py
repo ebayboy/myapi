@@ -13,7 +13,7 @@ DIALECT = 'mysql'
 DRIVER = 'pymysql'
 USERNAME = 'root'
 PASSWORD = 'Xiang010'
-HOST = '127.0.0.1'
+HOST = 'www.codedayday.com'
 PORT = '3306'
 DATABASE = 'codedayday'
 

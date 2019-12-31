@@ -11,18 +11,17 @@
 
 from flask import Flask, Request, jsonify, got_request_exception
 from flask_restful import Api, Resource, fields
-from flask_sqlalchemy import SQLAlchemy
 import sys
 
 #import resource
 import config
-from db import db
 from werkzeug.exceptions import HTTPException
 import common.common as cm
 from common.common import Common
 
 from resources.User import User, UserList
 from resources.Constellation import Constellation, ConstellationList
+from db import db
 
 
 def log_exception(sender, exception, **extra):
@@ -32,6 +31,7 @@ def log_exception(sender, exception, **extra):
 
 app = Flask(__name__)
 app.config.from_object(config)
+db.init_app(app)
 
 got_request_exception.connect(log_exception, app)
 
@@ -51,6 +51,6 @@ api.add_resource(
 api.add_resource(ConstellationList, '/ConstellationList')
 
 if __name__ == '__main__':
-    from db import db
-    db.init_app(app)
+    #from db import db
+    # db.init_app(app)
     app.run(debug=True)
