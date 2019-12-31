@@ -32,6 +32,7 @@ def log_exception(sender, exception, **extra):
 
 app = Flask(__name__)
 app.config.from_object(config)
+
 db.init_app(app)
 
 got_request_exception.connect(log_exception, app)
