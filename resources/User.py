@@ -49,7 +49,6 @@ post_parser.add_argument(
 user_fields = {
     'id': fields.Integer,
     'username': fields.String,
-    'password': fields.String,
     'email': fields.String,
     'sub': fields.String,
     'uuid': fields.String,
