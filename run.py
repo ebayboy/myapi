@@ -9,14 +9,15 @@
 # @Copyright (c)  all right reserved
 # **************************************************************************/
 
+import sys
+import config
+import common.common as cm
+
 from flask import Flask, Request, jsonify, got_request_exception
 from flask_restful import Api, Resource, fields
-import sys
 
 #import resource
-import config
 from werkzeug.exceptions import HTTPException
-import common.common as cm
 from common.common import Common
 
 from resources.User import User, UserList
