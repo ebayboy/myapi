@@ -12,10 +12,10 @@
 #**************************************************************************/ 
 
 #export 
-pip freeze > requirements.txt
+pip3 freeze > requirements.txt
 
 #install 
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 
 
 exit 0
