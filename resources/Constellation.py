@@ -24,12 +24,15 @@ constellation_fields = {
     'work': fields.String
 }
 
+
 class Constellation(Resource):
     def post(self):
-        dic_filter=marshal(request.form, constellation_fields)
+        dic_filter = marshal(request.form, constellation_fields)
 
         if ConstellationModel.find_by_name(format(dic_filter['name'])):
-            raise AlreadyExistsError( "An item with name '{}' already exists.".format(dic_filter['name']))
+            raise AlreadyExistsError(
+                "An item with name '{}' already exists.".format(
+                    dic_filter['name']))
 
         constellation = ConstellationModel(**dic_filter)
         if constellation.create_constellation() is None:
@@ -38,8 +41,17 @@ class Constellation(Resource):
         return Common.returnTrueJson(Common, marshal(
             constellation, constellation_fields))
 
-    def get(self, name):
-        constellation = ConstellationModel.find_by_name(name)
+    def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument(
+            'name', dest='name',
+            type=str, location=['args'],
+            required = True, help = 'The name')
+        data=parser.parse_args()
+
+        print(format(data['name']))
+
+        constellation=ConstellationModel.find_by_name(format(data['name']))
         if constellation:
             return Common.returnTrueJson(Common, marshal(
                 constellation, constellation_fields))
@@ -50,10 +62,9 @@ class Constellation(Resource):
 
 class ConstellationList(Resource):
     def get(self):
-        constellationlist = ConstellationModel.query.all()
+        constellationlist=ConstellationModel.query.all()
         if constellationlist:
             return Common.returnTrueJson(
                 Common, marshal(constellationlist, constellation_fields))
 
         raise ResourceDoesNotExistError("Not found!")
-

@@ -46,11 +46,8 @@ api.add_resource(User, '/User', '/User/<string:username>')
 api.add_resource(UserList, '/UserList')
 
 # Constellation
-api.add_resource(
-    Constellation,
-    '/Constellation',
-    '/Constellation/<string:name>')
+api.add_resource(Constellation, '/Constellation')
 api.add_resource(ConstellationList, '/ConstellationList')
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0',port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5000)
