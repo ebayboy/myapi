@@ -20,7 +20,7 @@ packaging==19.2
 pbr==5.4.4
 pycodestyle==2.5.0
 pycryptodomex==3.9.4
-Pygments==2.5.2
+Pygments==2.7.4
 PyInstaller==3.5
 PyMySQL==0.9.3
 pyparsing==2.4.5
